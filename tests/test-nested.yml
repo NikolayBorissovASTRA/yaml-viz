@@ -1,0 +1,20 @@
+WebApp:
+  metadata:
+    name: "E-commerce Platform"
+    description: "Online shopping platform"
+    version: "3.0"
+  server:
+    host: "0.0.0.0"
+    port: 3000
+    ssl_enabled: true
+  database:
+    host: "db.example.com"
+    port: 5432
+    name: "ecommerce"
+    credentials:
+      username: "admin"
+      password: "xyz"
+  services:
+    payment_gateway: "stripe"
+    email_provider: "sendgrid"
+    storage: "s3"

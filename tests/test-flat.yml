@@ -1,0 +1,12 @@
+SimpleConfig:
+  app_name: "My Application"
+  version: "2.1.0"
+  debug: true
+  port: 8080
+  database_url: "postgresql://localhost:5432/mydb"
+  api_key: "xyz"
+  features:
+    - "authentication"
+    - "logging"
+    - "monitoring"
+    - "caching"

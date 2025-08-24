@@ -1,0 +1,21 @@
+Project:
+  name: "Complex Test Project"
+  type:
+    - "Option A"
+    - "Option B"
+  Inventargruppe:
+    "Orientierung (ORT)":
+      - name: "Bezugspunkte und Achse: Rampe und Anschluss"
+        code: "ORT001"
+      - name: "Koordinatensystem"
+        code: "ORT002"
+    "Werkleitung (WLK)":
+      - name: "Entwässerung"
+        code: "WLK001"
+      - name: "Wasserleitung"
+        code: "WLK002"
+    "Objekte (OBJ)":
+      - name: "Kunstbauten (jedes IO ein Fachmodell)"
+        code: "OBJ001"
+      - name: "Brücken"
+        code: "OBJ002"

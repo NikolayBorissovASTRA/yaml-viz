@@ -1,0 +1,24 @@
+platform_name: "DataPipe Analytics"
+user_limit: 1000
+is_production: false
+regions:
+  - "us-east-1"
+  - "eu-west-1"
+  - "asia-pacific"
+admin_email: "admin@example.com"
+backup_schedule: "0 2 * * *"
+integrations:
+  "External APIs (EXT)":
+    - name: "Google Analytics API"
+      code: "EXT001"
+      enabled: true
+    - name: "Salesforce CRM"
+      code: "EXT002"
+      enabled: false
+  "Data Sources (DS)":
+    - name: "MySQL Database"
+      code: "DS001"
+      type: "relational"
+    - name: "MongoDB Collection"
+      code: "DS002"
+      type: "document"

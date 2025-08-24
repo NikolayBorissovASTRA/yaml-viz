@@ -1,0 +1,17 @@
+Configuration:
+  title: "My Custom Configuration"
+  version: "1.0"
+  settings:
+    - "Debug Mode"
+    - "Production Mode"
+  modules:
+    "Authentication (AUTH)":
+      - name: "OAuth2 Provider"
+        code: "AUTH001"
+      - name: "JWT Validation"
+        code: "AUTH002"
+    "Database (DB)":
+      - name: "PostgreSQL Connection"
+        code: "DB001"
+      - name: "Redis Cache"
+        code: "DB002"

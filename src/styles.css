@@ -1,0 +1,71 @@
+/* Dynamic YAML Form Generator - Styles */
+
+/* Main container spacing */
+.main > div {
+    padding: 2rem 2.5rem 2rem 2.5rem;
+}
+
+/* Form element spacing */
+.stSelectbox > div > div,
+.stMultiSelect > div,
+.stTextInput > div > div,
+.stTabs [data-baseweb="tab-list"] {
+    margin-bottom: 0.5rem;
+}
+
+/* Block container padding */
+.block-container {
+    padding: 2rem 2.5rem 2rem 2.5rem;
+    max-width: none;
+}
+
+/* Uniform form label styling - make all labels consistent size */
+.stTextInput > label,
+.stNumberInput > label,
+.stSelectbox > label,
+.stMultiSelect > label,
+.stCheckbox > label,
+.stExpander > label,
+div[data-testid="stExpander"] > div > label,
+div[data-testid="stTextInput"] > label,
+div[data-testid="stNumberInput"] > label,
+div[data-testid="stSelectbox"] > label,
+div[data-testid="stMultiSelect"] > label,
+div[data-testid="stCheckbox"] > label {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.25rem !important;
+}
+
+/* Reduce spacing in expandable sections */
+.stExpander > div > div {
+    padding: 0.5rem 0 !important;
+}
+
+/* Additional professional styling */
+.stAlert {
+    margin-bottom: 1rem;
+}
+
+/* Code block styling for preview */
+.stCodeBlock {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+/* Button styling for consistency */
+.stButton > button {
+    width: 100%;
+    font-weight: 500;
+}
+
+/* File uploader customization */
+.stFileUploader {
+    margin-bottom: 1rem;
+}
+
+/* Improve expander header appearance */
+.streamlit-expanderHeader {
+    font-weight: 600;
+    font-size: 0.95rem;
+}

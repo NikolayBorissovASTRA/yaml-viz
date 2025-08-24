@@ -1,0 +1,35 @@
+Enterprise:
+  organization:
+    name: "TechCorp Solutions"
+    industry: "Software Development"
+    size: "large"
+  departments:
+    engineering:
+      head: "John Smith"
+      budget: 2500000
+      teams:
+        - "Frontend"
+        - "Backend" 
+        - "DevOps"
+        - "QA"
+    marketing:
+      head: "Jane Doe"
+      budget: 800000
+      campaigns:
+        - "Product Launch"
+        - "Brand Awareness"
+    operations:
+      head: "Bob Wilson"
+      budget: 1200000
+      areas:
+        - "Infrastructure"
+        - "Security"
+        - "Compliance"
+  policies:
+    security_level: "high"
+    data_retention: "7 years"
+    backup_frequency: "daily"
+  locations:
+    - "San Francisco, CA"
+    - "Austin, TX"
+    - "Berlin, Germany"
