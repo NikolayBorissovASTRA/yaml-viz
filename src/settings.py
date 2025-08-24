@@ -28,10 +28,8 @@ CSV_EXPORT_FILENAME = "config.csv"
 CSV_EXPORT_MIME = "text/csv"
 DOWNLOAD_YAML_TEXT = "Download YAML"
 DOWNLOAD_CSV_TEXT = "Download CSV"
+VALIDATE_YAML_TEXT = "Validate YAML"
 
-# Default values
-DEFAULT_PLACEHOLDER = "xyz"
-DEFAULT_ROOT_KEY = "Data"
 
 # Form field settings
 FIELD_PREFIX = "field_"
@@ -51,7 +49,3 @@ YAML_FLOW_STYLE = False
 YAML_INDENT = 2
 YAML_UNICODE = True
 YAML_SORT_KEYS = False
-
-# Regular expressions for cleaning YAML
-BOOL_NULL_REGEX = r"['\"](?:true|false|null)['\"]"
-NUMBER_REGEX = r"['\"](\d+(?:\.\d+)?)['\"]"

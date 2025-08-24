@@ -61,7 +61,7 @@ class DynamicFormGenerator:
         if isinstance(value, str):
             result = st.text_input(
                 label,
-                value="" if value == settings.DEFAULT_PLACEHOLDER else value,
+                value=value,
                 key=f"{settings.FIELD_PREFIX}{key}",
             )
             if result:
@@ -157,9 +157,7 @@ class DynamicFormGenerator:
             {self.root_key: ordered_data}
             if self.root_key
             else (
-                {settings.DEFAULT_ROOT_KEY: ordered_data}
-                if ordered_data
-                else ordered_data
+                ordered_data
             )
         )
 
@@ -177,6 +175,24 @@ class DynamicFormGenerator:
         """Remove unnecessary quotes from YAML output."""
         yaml_str = re.sub(r'''(['"])(.*?)\1''', r"\2", yaml_str)
         return yaml_str
+
+    def validate_yaml(self) -> tuple[bool, str]:
+        """Validate the current YAML output and return status with message."""
+        if not self.form_data:
+            return False, "No data to validate"
+        
+        try:
+            yaml_output = self.export_yaml()
+            if yaml_output == settings.NO_DATA_TEXT:
+                return False, "No data to validate"
+            
+            # Try to parse the generated YAML
+            yaml.safe_load(yaml_output)
+            return True, "YAML is valid"
+        except yaml.YAMLError as e:
+            return False, f"YAML validation error: {str(e)}"
+        except Exception as e:
+            return False, f"Validation error: {str(e)}"
 
     def export_csv(self) -> str:
         """Export form data as CSV with minimal quoting."""
@@ -285,6 +301,10 @@ def main():
         st.session_state.file_uploader_key = 0
     if "selected_template" not in st.session_state:
         st.session_state.selected_template = None
+    if "yaml_validation_status" not in st.session_state:
+        st.session_state.yaml_validation_status = None
+    if "yaml_is_valid" not in st.session_state:
+        st.session_state.yaml_is_valid = False
 
     app = st.session_state.form_generator
 
@@ -384,6 +404,10 @@ def main():
                 # Increment the file uploader key to force a complete reset
                 st.session_state.file_uploader_key += 1
 
+                # Reset validation state
+                st.session_state.yaml_validation_status = None
+                st.session_state.yaml_is_valid = False
+                
                 # Clear all form field widgets that might be cached
                 keys_to_delete = [
                     key
@@ -436,7 +460,19 @@ def main():
         st.code(preview, language="yaml", line_numbers=settings.SHOW_LINE_NUMBERS)
 
         if form_data:
-            col_yaml, col_csv = st.columns(2)
+            # First row: Validate YAML and Download YAML buttons
+            col_validate, col_yaml = st.columns(2)
+            with col_validate:
+                if st.button(
+                    settings.VALIDATE_YAML_TEXT,
+                    use_container_width=settings.USE_CONTAINER_WIDTH,
+                    type="secondary",
+                ):
+                    is_valid, message = app.validate_yaml()
+                    st.session_state.yaml_is_valid = is_valid
+                    st.session_state.yaml_validation_status = message
+                    st.rerun()
+            
             with col_yaml:
                 st.download_button(
                     settings.DOWNLOAD_YAML_TEXT,
@@ -444,15 +480,24 @@ def main():
                     settings.YAML_EXPORT_FILENAME,
                     settings.YAML_EXPORT_MIME,
                     use_container_width=settings.USE_CONTAINER_WIDTH,
+                    disabled=not st.session_state.yaml_is_valid,
                 )
-            with col_csv:
-                st.download_button(
-                    settings.DOWNLOAD_CSV_TEXT,
-                    app.export_csv(),
-                    settings.CSV_EXPORT_FILENAME,
-                    settings.CSV_EXPORT_MIME,
-                    use_container_width=settings.USE_CONTAINER_WIDTH,
-                )
+            
+            # Show validation status message if available
+            if st.session_state.yaml_validation_status:
+                if st.session_state.yaml_is_valid:
+                    st.success(st.session_state.yaml_validation_status)
+                else:
+                    st.error(st.session_state.yaml_validation_status)
+            
+            # Second row: CSV download button (spans both columns)
+            st.download_button(
+                settings.DOWNLOAD_CSV_TEXT,
+                app.export_csv(),
+                settings.CSV_EXPORT_FILENAME,
+                settings.CSV_EXPORT_MIME,
+                use_container_width=settings.USE_CONTAINER_WIDTH,
+            )
 
 
 if __name__ == "__main__":
