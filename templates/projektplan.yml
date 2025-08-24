@@ -1,0 +1,22 @@
+Projektname: "xyz"
+Modelltyp:
+  - "Orientierung (ORT)"
+  - "Umgebung (UMG)"
+  - "Trasse (TRA)"
+  - "Werkleitungen (WKL)"
+  - "Objekt (OBJ)"
+  - "BSA"
+  - "Bau"
+Phase:
+  - "GP/EK"
+  - "AP/MK - DP/MP"
+  - "Ausschreibung"
+  - "Ausführung"
+  - "IBN"
+Modellgruppe:
+  - "Bestandsmodell (BM)"
+  - "Projektmodell (PM)"
+  - "Modell des ausgeführtes Werks (MAW)"
+Lokalisierung:
+  - "RBBS"
+  - "LV95-Koordinaten"

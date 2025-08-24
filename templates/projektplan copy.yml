@@ -1,0 +1,112 @@
+Projektname: "xyz"
+Modelltyp:
+  - "Orientierung (ORT)"
+  - "Umgebung (UMG)"
+  - "Trasse (TRA)"
+  - "Werkleitungen (WKL)"
+  - "Objekt (OBJ)"
+  - "BSA"
+  - "Bau"
+Phase:
+  - "GP/EK"
+  - "AP/MK - DP/MP"
+  - "Ausschreibung"
+  - "Ausführung"
+  - "IBN"
+Modellgruppe:
+  - "Bestandsmodell (BM)"
+  - "Projektmodell (PM)"
+  - "Modell des ausgeführtes Werks (MAW)"
+Inventargruppe:
+  Orientierung (ORT):
+    - name: "Referenzpunkte"
+      code: REF
+    - name: "Kilometrierung (RBBS-Punkte) und RBBS-Achse"
+      code: RBBS
+    - name: "Bezugspunkte und Achse: Rampe und Anschluss"
+    - name: "Baulinien"
+      code: BLI
+  Umgebung (UMG):
+    - name: "Geländemodell"
+      code: GLM
+    - name: "Gebäude"
+      code: GEB
+    - name: "Kantons-/Gemeindegrenze"
+      code: GRE
+    - name: "Amtliche Vermessung"
+      code: AMV
+    - name: "Bauzonen"
+      code: BZO
+    - name: "Flächennutzung"
+      code: FLN
+    - name: "Bepflanzung"
+      code: BEP
+    - name: "Freileitung"
+      code: FRL
+    - name: "Geologie"
+      code: GEO
+    - name: "Grundwasser"
+      code: GRW
+    - name: "Landerwerb/Enteignung"
+      code: LEW
+  Werkleitung (WLK):
+    - name: "Entwässerung"
+      code: ENT
+    - name: "Abwasser"
+      code: ABW
+    - name: "Wasser"
+      code: WAS
+    - name: "Gas"
+      code: GAS
+    - name: "Strom und andere"
+      code: EWS
+  Trasse (TRA):
+    - name: "Trassee und Richtung"
+      code: TRA
+    - name: "Rampe, Anschlüsse"
+      code: ANS
+    - name: "Zustand"
+      code: ZUS
+    - name: "Fahrzeugrückhaltesystem"
+      code: FRS
+    - name: "Signalisation"
+      code: SIG
+    - name: "Lichtraumprofil"
+      code: LRP
+  Objekte (OBJ):
+    - name: "Kunstbauten (jedes IO ein Fachmodell)"
+      code: [UNF, UEF, SPO, LSW, STM, WLK]
+    - name: "Ausführung (Objekt)"
+      code: AUF
+    - name: "Wildschutzzäune"
+      code: WSZ
+    - name: "Tunnel"
+      code: TUN
+    - name: "Uebrige Bauten"
+      code: UEB
+    - name: "Gebaeude der NS"
+      code: GNS
+  BSA:
+    - name: "Energieversorgung"
+      code: ENG
+    - name: "Beleuchtung"
+      code: BEL
+    - name: "Signalisation"
+      code: SIG
+    - name: "Lüftung"
+      code: LUF
+    - name: "Überwachungsanlagen"
+      code: UWA
+    - name: "Kommunikation/Leittechnik"
+      code: KOM
+    - name: "Kabelanlage"
+      code: KAB
+    - name: "Nebeneinrichtung"
+      code: NEB
+  Bau:
+    - name: "Baustelleneinrichtung"
+    - name: "Verkehrsführung"
+    - name: "Provisorien"
+Lokalisierung:
+  - "RBBS"
+  - "LV95-Koordinaten"

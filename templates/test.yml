@@ -1,0 +1,16 @@
+Project:
+  name: "Test Project"
+  type:
+    - "Option A"
+    - "Option B"
+  categories:
+    Category1:
+      - name: "Item 1"
+        code: "A1"
+      - name: "Item 2"
+        code: "A2"
+    Category2:
+      - name: "Item 3"
+        code: "B1"
+      - name: "Item 4"
+        code: "B2"

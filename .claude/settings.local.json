@@ -15,9 +15,17 @@
       "Bash(uv venv:*)",
       "Bash(uv sync:*)",
       "Bash(uv run streamlit run:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(uv run pytest:*)",
+      "Bash(uv run ruff:*)",
+      "Bash(uv run ruff format:*)",
+      "Bash(python:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/borissov/Documents/projects/docker/risklick/notebooks/IFC/projects/projectplan"
+    ]
   }
 }

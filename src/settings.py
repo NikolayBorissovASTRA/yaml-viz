@@ -16,7 +16,7 @@ NO_DATA_TEXT = "No data"
 SUCCESS_MESSAGE = "Template loaded successfully"
 
 # File upload settings
-ALLOWED_FILE_TYPES = ['yaml', 'yml']
+ALLOWED_FILE_TYPES = ["yaml", "yml"]
 FILE_UPLOAD_LABEL_VISIBILITY = "collapsed"
 DRAG_DROP_TEXT = "Drag and drop file here"
 BROWSE_FILES_TEXT = "Browse files"
@@ -54,4 +54,4 @@ YAML_SORT_KEYS = False
 
 # Regular expressions for cleaning YAML
 BOOL_NULL_REGEX = r"['\"](?:true|false|null)['\"]"
-NUMBER_REGEX = r"['\"](\\d+(?:\\.\\d+)?)['\"]"
+NUMBER_REGEX = r"['\"](\d+(?:\.\d+)?)['\"]"
