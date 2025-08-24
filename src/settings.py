@@ -13,13 +13,10 @@ FORM_SECTION_TITLE = "Configuration Form"
 PREVIEW_SECTION_TITLE = "Live Preview"
 LOAD_TEMPLATE_INFO = "Load a YAML template to start"
 NO_DATA_TEXT = "No data"
-SUCCESS_MESSAGE = "Template loaded successfully"
 
 # File upload settings
 ALLOWED_FILE_TYPES = ["yaml", "yml"]
 FILE_UPLOAD_LABEL_VISIBILITY = "collapsed"
-DRAG_DROP_TEXT = "Drag and drop file here"
-BROWSE_FILES_TEXT = "Browse files"
 
 # Export settings
 YAML_EXPORT_FILENAME = "config.yaml"
@@ -29,7 +26,6 @@ CSV_EXPORT_MIME = "text/csv"
 DOWNLOAD_YAML_TEXT = "Download YAML"
 DOWNLOAD_CSV_TEXT = "Download CSV"
 VALIDATE_YAML_TEXT = "Validate YAML"
-
 
 # Form field settings
 FIELD_PREFIX = "field_"
