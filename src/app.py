@@ -175,12 +175,7 @@ class DynamicFormGenerator:
 
     def _clean_yaml_quotes(self, yaml_str: str) -> str:
         """Remove unnecessary quotes from YAML output."""
-        # Remove quotes from booleans and null values
-        yaml_str = re.sub(
-            settings.BOOL_NULL_REGEX, lambda m: m.group(0)[1:-1], yaml_str
-        )
-        # Remove quotes from numbers
-        yaml_str = re.sub(settings.NUMBER_REGEX, r"\1", yaml_str)
+        yaml_str = re.sub(r'''(['"])(.*?)\1''', r"\2", yaml_str)
         return yaml_str
 
     def export_csv(self) -> str:
