@@ -52,7 +52,7 @@ run-pip.bat (check also manual steps: pip-install-win32.txt)
 docker-compose up -d
 ```
 ```sh
-http://localhost:8502
+Open browser: http://localhost:8502
 ```
 
 ## 🏗️ Architecture
