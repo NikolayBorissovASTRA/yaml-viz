@@ -11,7 +11,7 @@ A clean, modular Streamlit application that generates dynamic forms from YAML te
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.9+
 - Either [uv](https://docs.astral.sh/uv/) (recommended) or pip package manager
 - Streamlit 1.12.0+ (automatically handles version compatibility)
 
