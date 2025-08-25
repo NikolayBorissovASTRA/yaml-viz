@@ -2,12 +2,22 @@
 
 This document explains the cross-platform Streamlit compatibility implemented in this project.
 
-## Issue
+## Issues
+
+### label_visibility Parameter
 
 The `label_visibility` parameter was introduced in Streamlit 1.16.0, but some environments (particularly Windows) may have older versions (e.g., 1.12.0) installed, causing:
 
 ```
 TypeError: selectbox() got an unexpected keyword argument 'label_visibility'
+```
+
+### line_numbers Parameter
+
+The `line_numbers` parameter for `st.code()` was introduced in Streamlit 1.28.0, causing similar issues on older versions:
+
+```
+TypeError: code() got an unexpected keyword argument 'line_numbers'
 ```
 
 ## Solution
@@ -16,16 +26,20 @@ The project implements automatic version detection and compatibility:
 
 ### Compatibility Functions
 
-**`_supports_label_visibility()`**
-- Checks if current Streamlit version >= 1.16.0
-- Returns boolean indicating support
+**Version Detection:**
+- `_supports_label_visibility()` - Checks if version >= 1.16.0
+- `_supports_line_numbers()` - Checks if version >= 1.28.0
 
-**`_get_selectbox_kwargs()`** and **`_get_file_uploader_kwargs()`**
-- Build parameter dictionaries compatible with current Streamlit version
-- Include `label_visibility` only if supported
+**Parameter Building:**
+- `_get_selectbox_kwargs()` - Compatible selectbox parameters
+- `_get_file_uploader_kwargs()` - Compatible file uploader parameters  
+- `_get_code_kwargs()` - Compatible code display parameters
 
-### Implementation Example
+These functions include version-specific parameters only if supported by the current Streamlit installation.
 
+### Implementation Examples
+
+#### selectbox/file_uploader Compatibility
 ```python
 # Before (incompatible with old versions)
 st.selectbox("Choose", options=["A", "B"], label_visibility="collapsed")
@@ -39,12 +53,27 @@ kwargs = _get_selectbox_kwargs(
 st.selectbox(**kwargs)
 ```
 
+#### st.code Compatibility
+```python
+# Before (incompatible with old versions)
+st.code("yaml: content", language="yaml", line_numbers=True)
+
+# After (compatible with all versions)
+kwargs = _get_code_kwargs(
+    body="yaml: content",
+    language="yaml",
+    line_numbers=True
+)
+st.code(**kwargs)
+```
+
 ## Version Support
 
-| Streamlit Version | Status | label_visibility | Behavior |
-|------------------|--------|------------------|----------|
-| 1.12.0 - 1.15.x | ✅ Supported | ❌ Ignored | Labels show normally |
-| 1.16.0+ | ✅ Supported | ✅ Applied | Labels can be collapsed |
+| Streamlit Version | Status | label_visibility | line_numbers | Behavior |
+|------------------|--------|------------------|--------------|----------|
+| 1.12.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Basic functionality |
+| 1.16.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Collapsed labels |
+| 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Full features |
 
 ## Dependencies
 

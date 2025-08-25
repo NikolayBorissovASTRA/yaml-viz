@@ -16,6 +16,11 @@ def _supports_label_visibility() -> bool:
     return version.parse(st.__version__) >= version.parse("1.16.0")
 
 
+def _supports_line_numbers() -> bool:
+    """Check if current Streamlit version supports line_numbers parameter in st.code()."""
+    return version.parse(st.__version__) >= version.parse("1.28.0")
+
+
 def _get_selectbox_kwargs(label: str, options: list, key: str = None, label_visibility: str = None) -> dict:
     """Get selectbox kwargs compatible with current Streamlit version."""
     kwargs = {
@@ -40,6 +45,18 @@ def _get_file_uploader_kwargs(label: str, type: list = None, key: str = None, la
         kwargs["key"] = key
     if label_visibility and _supports_label_visibility():
         kwargs["label_visibility"] = label_visibility
+    return kwargs
+
+
+def _get_code_kwargs(body: str, language: str = None, line_numbers: bool = None) -> dict:
+    """Get st.code kwargs compatible with current Streamlit version."""
+    kwargs = {
+        "body": body
+    }
+    if language:
+        kwargs["language"] = language
+    if line_numbers is not None and _supports_line_numbers():
+        kwargs["line_numbers"] = line_numbers
     return kwargs
 
 
@@ -238,7 +255,12 @@ class UIComponents:
         structured_data = app.get_structured_data()
         preview = ExportUtils.export_yaml(structured_data)
 
-        st.code(preview, language="yaml", line_numbers=settings.SHOW_LINE_NUMBERS)
+        code_kwargs = _get_code_kwargs(
+            body=preview,
+            language="yaml", 
+            line_numbers=settings.SHOW_LINE_NUMBERS
+        )
+        st.code(**code_kwargs)
 
         if form_data:
             UIComponents._render_export_controls(preview, structured_data)
