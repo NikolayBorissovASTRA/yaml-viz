@@ -35,12 +35,19 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 1. **Clone or download the project**
 2. **Run the application**:
+
+**Linux/macOS:**
 ```sh
 ./run-pip.sh
 ```
 
+**Windows:**
+```cmd
+run-pip.bat
+```
+
 Both methods will automatically:
-- Install dependencies
+- Install dependencies (in virtual environment)
 - Start the Streamlit server  
 - Open in your browser at `http://localhost:8501`
 
@@ -127,27 +134,38 @@ graph TB
 
 Generate a professional demo GIF automatically using Playwright. Works with both uv and pip installations:
 
+**Linux/macOS:**
 ```sh
 # Complete pipeline (auto-detects uv or pip)
 ./gif-demo/demo.sh pipeline
 
 # Individual commands
 ./gif-demo/demo.sh setup     # One-time setup
-./gif-demo/demo.sh prepare   # Create sample templates
+./gif-demo/demo.sh status    # Check dependencies
 ./gif-demo/demo.sh generate  # Generate GIF (requires running app)
 
-# Custom GIF name and size limit
+# Custom configuration
 GIF_NAME=highway-demo.gif SIZE_LIMIT_MB=0.8 ./gif-demo/demo.sh pipeline
+```
 
-# Higher quality settings
-FPS=8 FINAL_WIDTH=600 FINAL_HEIGHT=780 ./gif-demo/demo.sh generate
+**Windows:**
+```cmd
+REM Basic Windows support
+gif-demo\demo.bat status    
+gif-demo\demo.bat setup     
+gif-demo\demo.bat pipeline  
 
-# Different project content
-PROJECT_NAME="My Custom Project" TEMPLATE_FILE=custom.yml ./gif-demo/demo.sh pipeline
+REM For full functionality, use WSL or Git Bash:
+bash gif-demo/demo.sh pipeline
 ```
 
 The demo script automatically detects whether you're using uv or pip and adapts accordingly.
 
-See `./gif-demo/demo.sh help` for full configuration options.
+**Platform Notes:**
+- **Linux/macOS**: Full functionality with automatic dependency detection
+- **Windows**: Basic support via .bat files, full features available via WSL/Git Bash
+- **Dependencies**: Automatically installs Playwright and Python packages, ffmpeg installation varies by platform
+
+See `./gif-demo/demo.sh help` or `gif-demo\demo.bat help` for configuration options.
 
 
