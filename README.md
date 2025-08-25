@@ -47,10 +47,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 run-pip.bat (check also manual steps: pip-install-win32.txt)
 ```
 
-Both methods will automatically:
-- Install dependencies (in virtual environment)
-- Start the Streamlit server  
-- Open in your browser at `http://localhost:8501`
+#### Option C: Using Docker
+```sh
+docker-compose up -d
+```
+```sh
+http://localhost:8502
+```
 
 ## 🏗️ Architecture
 
@@ -174,5 +177,6 @@ See `./gif-demo/demo.sh help` or `gif-demo\demo.bat help` for configuration opti
 
 - **[Architecture](docs/architecture.md)** - System design and module structure
 - **[Compatibility](docs/compatibility.md)** - Cross-platform Streamlit version support and Windows testing
+
 
 
