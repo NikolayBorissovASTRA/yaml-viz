@@ -28,6 +28,69 @@ The application will automatically:
 - Start the Streamlit server
 - Open in your browser at `http://localhost:8501`
 
+## 🎥 Demo
+
+![Dynamic YAML Form Generator Demo](demo.gif)
+
+### Automated GIF Demo Generation
+
+Generate a professional demo GIF automatically using Playwright:
+
+```sh
+# Complete pipeline (recommended)
+./gif-demo/demo.sh pipeline
+
+# Individual commands
+./gif-demo/demo.sh setup     # One-time setup
+./gif-demo/demo.sh prepare   # Create sample templates
+./gif-demo/demo.sh generate  # Generate GIF (requires running app)
+```
+
+The pipeline automatically starts the app, generates the GIF, and cleans up.
+
+#### Configuration Options
+
+Customize the demo generation with environment variables:
+
+```sh
+# Custom GIF name and size limit
+GIF_NAME=highway-demo.gif SIZE_LIMIT_MB=0.8 ./gif-demo/demo.sh pipeline
+
+# Higher quality settings
+FPS=8 FINAL_WIDTH=600 FINAL_HEIGHT=780 ./gif-demo/demo.sh generate
+
+# Different project content
+PROJECT_NAME="My Custom Project" TEMPLATE_FILE=custom.yml ./gif-demo/demo.sh pipeline
+```
+
+**Available Configuration:**
+- `GIF_NAME` - Output filename (default: demo.gif)
+- `FINAL_WIDTH/HEIGHT` - Output resolution (default: 500x650)
+- `FPS` - Frame rate (default: 6)
+- `SIZE_LIMIT_MB` - Compression trigger (default: 1.0)
+- `PROJECT_NAME` - Form content (default: "Highway Construction Demo")
+- `TEMPLATE_FILE` - YAML template (default: pp.yml)
+
+See `./gif-demo/demo.sh help` for full configuration options.
+
+#### Demo Features Showcase
+
+The automated GIF demonstrates:
+1. **Template Selection** - Choose from pre-loaded YAML templates (pp.yml)
+2. **Dynamic Form Generation** - Watch forms appear automatically
+3. **Interactive Form Filling** - Project name input and multiselect interactions
+4. **Inventargruppe Navigation** - Tab switching with specific selections:
+   - **Orientierung (ORT)** - RBBS-Achse selection
+   - **Umgebung (UMG)** - Multiple environmental elements
+5. **Live YAML Preview** - Real-time preview updates
+6. **Validation & Export** - YAML validation and download options
+
+**Technical Details:**
+- **Size**: <1MB (optimized for GitHub)
+- **Duration**: ~30 seconds (compressed timing)
+- **Resolution**: 400x520 (ultra-compressed) or 500x650 (standard)
+- **Features**: Real form interactions, German project planning elements
+
 ## 🏗️ Architecture
 
 ### System Overview
