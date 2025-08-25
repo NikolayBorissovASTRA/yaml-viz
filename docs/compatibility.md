@@ -30,7 +30,7 @@ AttributeError: module 'streamlit' has no attribute 'rerun'
 
 ### use_container_width Parameter
 
-The `use_container_width` parameter for buttons and download buttons was introduced in Streamlit 1.2.0, causing issues on older versions:
+The `use_container_width` parameter for buttons and download buttons was introduced in Streamlit 1.13.0, causing issues on older versions:
 
 ```
 TypeError: button() got an unexpected keyword argument 'use_container_width'
@@ -47,7 +47,7 @@ The project implements automatic version detection and compatibility:
 - `_supports_label_visibility()` - Checks if version >= 1.16.0
 - `_supports_line_numbers()` - Checks if version >= 1.28.0  
 - `_supports_rerun()` - Checks if version >= 1.18.0
-- `_supports_use_container_width()` - Checks if version >= 1.2.0
+- `_supports_use_container_width()` - Checks if version >= 1.13.0
 
 **Parameter Building:**
 - `_get_selectbox_kwargs()` - Compatible selectbox parameters
@@ -131,7 +131,8 @@ st.download_button(**kwargs)
 
 | Streamlit Version | Status | label_visibility | line_numbers | st.rerun | use_container_width | Behavior |
 |------------------|--------|------------------|--------------|----------|--------------------|---------| 
-| 1.2.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | ✅ Applied | Basic with buttons |
+| 1.12.0 - 1.12.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | ❌ Ignored | Basic functionality |
+| 1.13.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | ✅ Applied | Basic with buttons |
 | 1.16.0 - 1.17.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses experimental | ✅ Applied | Collapsed labels |
 | 1.18.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses st.rerun | ✅ Applied | Modern rerun |
 | 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Uses st.rerun | ✅ Applied | Full features |
@@ -139,7 +140,7 @@ st.download_button(**kwargs)
 ## Dependencies
 
 - **packaging>=21.0** - Required for version comparison
-- **streamlit>=1.2.0** - Minimum supported version (for use_container_width support)
+- **streamlit>=1.12.0** - Minimum supported version (basic compatibility)
 
 ## Testing
 

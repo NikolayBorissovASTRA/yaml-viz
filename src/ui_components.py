@@ -27,8 +27,8 @@ def _supports_rerun() -> bool:
 
 
 def _supports_use_container_width() -> bool:
-    """Check if current Streamlit version supports use_container_width parameter."""
-    return version.parse(st.__version__) >= version.parse("1.2.0")
+    """Check if current Streamlit version supports use_container_width parameter for buttons."""
+    return version.parse(st.__version__) >= version.parse("1.13.0")
 
 
 def _get_selectbox_kwargs(label: str, options: list, key: str = None, label_visibility: str = None) -> dict:
