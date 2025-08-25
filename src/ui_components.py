@@ -21,6 +21,11 @@ def _supports_line_numbers() -> bool:
     return version.parse(st.__version__) >= version.parse("1.28.0")
 
 
+def _supports_rerun() -> bool:
+    """Check if current Streamlit version supports st.rerun() (vs st.experimental_rerun())."""
+    return version.parse(st.__version__) >= version.parse("1.18.0")
+
+
 def _get_selectbox_kwargs(label: str, options: list, key: str = None, label_visibility: str = None) -> dict:
     """Get selectbox kwargs compatible with current Streamlit version."""
     kwargs = {
@@ -58,6 +63,14 @@ def _get_code_kwargs(body: str, language: str = None, line_numbers: bool = None)
     if line_numbers is not None and _supports_line_numbers():
         kwargs["line_numbers"] = line_numbers
     return kwargs
+
+
+def _rerun_app() -> None:
+    """Rerun the Streamlit app using compatible method."""
+    if _supports_rerun():
+        _rerun_app()
+    else:
+        st.experimental_rerun()
 
 
 class UIComponents:
@@ -186,7 +199,7 @@ class UIComponents:
         if message:
             with st.session_state.message_placeholder.container():
                 st.success(message)
-        st.rerun()
+        _rerun_app()
 
     @staticmethod
     def _show_success_message() -> None:
@@ -244,7 +257,7 @@ class UIComponents:
 
         st.session_state.upload_placeholder = None
         st.session_state.message_placeholder = None
-        st.rerun()
+        _rerun_app()
 
     @staticmethod
     def render_preview_section(form_data: Dict) -> None:
@@ -280,7 +293,7 @@ class UIComponents:
                 is_valid, message = ExportUtils.validate_yaml(data)
                 st.session_state.yaml_is_valid = is_valid
                 st.session_state.yaml_validation_status = message
-                st.rerun()
+                _rerun_app()
 
         with col_yaml:
             st.download_button(

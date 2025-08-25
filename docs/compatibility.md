@@ -20,6 +20,14 @@ The `line_numbers` parameter for `st.code()` was introduced in Streamlit 1.28.0,
 TypeError: code() got an unexpected keyword argument 'line_numbers'
 ```
 
+### st.rerun Function
+
+The `st.rerun()` function was renamed from `st.experimental_rerun()` in Streamlit 1.18.0, causing issues on older versions:
+
+```
+AttributeError: module 'streamlit' has no attribute 'rerun'
+```
+
 ## Solution
 
 The project implements automatic version detection and compatibility:
@@ -28,14 +36,18 @@ The project implements automatic version detection and compatibility:
 
 **Version Detection:**
 - `_supports_label_visibility()` - Checks if version >= 1.16.0
-- `_supports_line_numbers()` - Checks if version >= 1.28.0
+- `_supports_line_numbers()` - Checks if version >= 1.28.0  
+- `_supports_rerun()` - Checks if version >= 1.18.0
 
 **Parameter Building:**
 - `_get_selectbox_kwargs()` - Compatible selectbox parameters
 - `_get_file_uploader_kwargs()` - Compatible file uploader parameters  
 - `_get_code_kwargs()` - Compatible code display parameters
 
-These functions include version-specific parameters only if supported by the current Streamlit installation.
+**Function Wrappers:**
+- `_rerun_app()` - Uses `st.rerun()` or `st.experimental_rerun()` based on version
+
+These functions automatically adapt to the installed Streamlit version.
 
 ### Implementation Examples
 
@@ -67,13 +79,23 @@ kwargs = _get_code_kwargs(
 st.code(**kwargs)
 ```
 
+#### st.rerun Compatibility
+```python
+# Before (incompatible with old versions)
+st.rerun()
+
+# After (compatible with all versions)
+_rerun_app()  # Uses st.rerun() or st.experimental_rerun()
+```
+
 ## Version Support
 
-| Streamlit Version | Status | label_visibility | line_numbers | Behavior |
-|------------------|--------|------------------|--------------|----------|
-| 1.12.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Basic functionality |
-| 1.16.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Collapsed labels |
-| 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Full features |
+| Streamlit Version | Status | label_visibility | line_numbers | st.rerun | Behavior |
+|------------------|--------|------------------|--------------|----------|----------|
+| 1.12.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | Basic functionality |
+| 1.16.0 - 1.17.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses experimental | Collapsed labels |
+| 1.18.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses st.rerun | Modern rerun |
+| 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Uses st.rerun | Full features |
 
 ## Dependencies
 
