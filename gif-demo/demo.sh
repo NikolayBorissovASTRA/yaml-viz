@@ -6,9 +6,10 @@ show_help() {
     echo ""
     echo "Commands:"
     echo "  setup     Install dependencies (Playwright, ffmpeg)"
-    echo "  prepare   Create sample YAML templates"
+    echo "  prepare   Create sample YAML templates"  
     echo "  generate  Generate GIF (requires running app)"
     echo "  pipeline  Complete pipeline (setup, start app, generate, cleanup)"
+    echo "  status    Check installation and dependencies"
     echo "  help      Show this help"
     echo ""
     echo "Environment Variables (Configuration):"
@@ -34,17 +35,39 @@ show_help() {
 setup_dependencies() {
     echo "Setting up dependencies..."
     
-    if ! command -v uv &> /dev/null; then
-        echo "uv not installed. Install with: curl -LsSf https://astral.sh/uv/install.sh | sh"
+    # Detect package manager preference
+    if command -v uv &> /dev/null; then
+        echo "Using uv package manager..."
+        cd ..
+        uv add playwright
+        echo "Installing Playwright browsers..."
+        uv run playwright install chromium
+        cd gif-demo
+    elif command -v python3 &> /dev/null; then
+        echo "Using pip package manager..."
+        cd ..
+        
+        # Create virtual environment if it doesn't exist
+        if [ ! -d ".venv" ]; then
+            echo "Creating virtual environment..."
+            python3 -m venv .venv
+        fi
+        
+        # Activate virtual environment
+        source .venv/bin/activate
+        
+        echo "Installing Python dependencies..."
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        
+        echo "Installing Playwright browsers..."
+        python -m playwright install chromium
+        
+        cd gif-demo
+    else
+        echo "Neither uv nor python3 found. Please install Python 3.10+ or uv"
         exit 1
     fi
-    
-    echo "Installing Python dependencies..."
-    cd ..
-    uv add playwright
-    
-    echo "Installing Playwright browsers..."
-    uv run playwright install chromium
     
     echo "Installing ffmpeg..."
     if ! command -v ffmpeg &> /dev/null; then
@@ -72,6 +95,71 @@ setup_dependencies() {
     
     chmod +x create-interactive-gif.py
     echo "Setup complete"
+}
+
+check_status() {
+    echo "🔍 Checking installation status..."
+    
+    # Check Python
+    if python3 --version &> /dev/null; then
+        python_version=$(python3 --version)
+        echo "✅ $python_version"
+    else
+        echo "❌ Python 3 not found"
+    fi
+    
+    # Check package manager
+    if command -v uv &> /dev/null; then
+        uv_version=$(uv --version)
+        echo "✅ uv found: $uv_version"
+        manager="uv"
+    elif command -v pip &> /dev/null; then
+        pip_version=$(pip --version | cut -d' ' -f1-2)
+        echo "✅ pip found: $pip_version"
+        manager="pip"
+    else
+        echo "❌ No package manager found (uv or pip)"
+        manager="none"
+    fi
+    
+    # Check virtual environment for pip setup
+    if [ "$manager" = "pip" ] && [ -d "../.venv" ]; then
+        echo "✅ Virtual environment found (.venv)"
+    elif [ "$manager" = "pip" ]; then
+        echo "⚠️  Virtual environment not found (run: ./run-pip.sh)"
+    fi
+    
+    # Check ffmpeg
+    if command -v ffmpeg &> /dev/null; then
+        ffmpeg_version=$(ffmpeg -version 2>/dev/null | head -1 | cut -d' ' -f3)
+        echo "✅ ffmpeg found: $ffmpeg_version"
+    else
+        echo "❌ ffmpeg not found (needed for GIF conversion)"
+    fi
+    
+    # Check Playwright
+    if [ "$manager" = "uv" ]; then
+        if uv run python -c "import playwright" &> /dev/null; then
+            echo "✅ Playwright installed (uv)"
+        else
+            echo "❌ Playwright not installed (run: ./gif-demo/demo.sh setup)"
+        fi
+    elif [ "$manager" = "pip" ] && [ -f "../.venv/bin/activate" ]; then
+        source ../.venv/bin/activate
+        if python -c "import playwright" &> /dev/null; then
+            echo "✅ Playwright installed (pip)"
+        else
+            echo "❌ Playwright not installed (run: ./gif-demo/demo.sh setup)"
+        fi
+    fi
+    
+    echo ""
+    echo "💡 Package manager detected: $manager"
+    if [ "$manager" = "uv" ]; then
+        echo "   Use: ./run.sh to start the app"
+    elif [ "$manager" = "pip" ]; then
+        echo "   Use: ./run-pip.sh to start the app"
+    fi
 }
 
 prepare_templates() {
@@ -127,23 +215,39 @@ generate_gif() {
     fi
     
     cd "$(dirname "$0")"
-    uv run python create-interactive-gif.py
+    
+    # Use appropriate Python execution method
+    if command -v uv &> /dev/null && [ -f "../pyproject.toml" ]; then
+        uv run python create-interactive-gif.py
+    else
+        # Activate virtual environment for pip
+        if [ -f "../.venv/bin/activate" ]; then
+            source ../.venv/bin/activate
+        fi
+        python create-interactive-gif.py
+    fi
 }
 
 run_pipeline() {
     echo "Starting complete GIF demo pipeline..."
     
-    # Check dependencies
-    if ! command -v uv &> /dev/null; then
-        echo "Running setup first..."
-        setup_dependencies
-    fi
-    
+    # Check dependencies and start app if needed
     echo "Checking if Streamlit app is running..."
     if ! curl -s http://localhost:8501 > /dev/null; then
         echo "Starting Streamlit app..."
         cd ..
-        uv run streamlit run src/app.py &
+        
+        # Use appropriate execution method
+        if command -v uv &> /dev/null && [ -f "pyproject.toml" ]; then
+            uv run streamlit run src/app.py &
+        else
+            # Activate virtual environment for pip
+            if [ -f ".venv/bin/activate" ]; then
+                source .venv/bin/activate
+            fi
+            python -m streamlit run src/app.py &
+        fi
+        
         APP_PID=$!
         cd gif-demo
         
@@ -164,7 +268,17 @@ run_pipeline() {
     
     echo "Generating enhanced GIF demo..."
     cd "$(dirname "$0")"
-    uv run python create-interactive-gif.py
+    
+    # Use appropriate Python execution method
+    if command -v uv &> /dev/null && [ -f "../pyproject.toml" ]; then
+        uv run python create-interactive-gif.py
+    else
+        # Activate virtual environment for pip
+        if [ -f "../.venv/bin/activate" ]; then
+            source ../.venv/bin/activate
+        fi
+        python create-interactive-gif.py
+    fi
     
     if [ $? -eq 0 ]; then
         GIF_NAME=${GIF_NAME:-demo.gif}
@@ -196,6 +310,9 @@ case "${1:-help}" in
         ;;
     pipeline)
         run_pipeline
+        ;;
+    status)
+        check_status
         ;;
     help|*)
         show_help

@@ -12,24 +12,36 @@ A clean, modular Streamlit application that generates dynamic forms from YAML te
 ### Prerequisites
 
 - Python 3.10+
-- [uv](https://docs.astral.sh/uv/) package manager
+- Either [uv](https://docs.astral.sh/uv/) (recommended) or pip package manager
 
 ### Installation
 
+Choose one of the following methods:
+
+#### Option A: Using uv (Recommended)
+
 1. **Clone or download the project**
-2. **Install uv** (if not already installed):
+2. **Install uv**:
 ```sh
-   curl -LsSf https://astral.sh/uv/install.sh | sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 3. **Run the application**:
 ```sh
-   ./run.sh
+./run.sh
 ```
 
-The application will automatically:
-- Install dependencies via uv
-- Start the Streamlit server
+#### Option B: Using pip
+
+1. **Clone or download the project**
+2. **Run the application**:
+```sh
+./run-pip.sh
+```
+
+Both methods will automatically:
+- Install dependencies
+- Start the Streamlit server  
 - Open in your browser at `http://localhost:8501`
 
 ## 🏗️ Architecture
@@ -113,9 +125,10 @@ graph TB
 
 ### Automated GIF Demo Generation
 
-Generate a professional demo GIF automatically using Playwright:
-```rust
-# Complete pipeline
+Generate a professional demo GIF automatically using Playwright. Works with both uv and pip installations:
+
+```sh
+# Complete pipeline (auto-detects uv or pip)
 ./gif-demo/demo.sh pipeline
 
 # Individual commands
@@ -131,8 +144,9 @@ FPS=8 FINAL_WIDTH=600 FINAL_HEIGHT=780 ./gif-demo/demo.sh generate
 
 # Different project content
 PROJECT_NAME="My Custom Project" TEMPLATE_FILE=custom.yml ./gif-demo/demo.sh pipeline
-
 ```
+
+The demo script automatically detects whether you're using uv or pip and adapts accordingly.
 
 See `./gif-demo/demo.sh help` for full configuration options.
 
