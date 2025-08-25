@@ -44,7 +44,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 **Windows:**
 ```cmd
-run-pip.bat
+run-pip.bat (check also manual steps: pip-install-win32.txt)
 ```
 
 Both methods will automatically:
