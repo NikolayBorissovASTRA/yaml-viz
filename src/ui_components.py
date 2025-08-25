@@ -342,31 +342,17 @@ class UIComponents:
     @staticmethod
     def _render_export_controls(preview: str, data: Dict) -> None:
         """Render validation and export buttons."""
-        # First row: Validate YAML and Download YAML buttons
-        col_validate, col_yaml = st.columns(2)
-
-        with col_validate:
-            button_kwargs = _get_button_kwargs(
-                label=settings.VALIDATE_YAML_TEXT,
-                use_container_width=settings.USE_CONTAINER_WIDTH,
-                type="secondary"
-            )
-            if st.button(**button_kwargs):
-                is_valid, message = ExportUtils.validate_yaml(data)
-                st.session_state.yaml_is_valid = is_valid
-                st.session_state.yaml_validation_status = message
-                _rerun_app()
-
-        with col_yaml:
-            download_kwargs = _get_download_button_kwargs(
-                label=settings.DOWNLOAD_YAML_TEXT,
-                data=preview,
-                file_name=settings.YAML_EXPORT_FILENAME,
-                mime=settings.YAML_EXPORT_MIME,
-                use_container_width=settings.USE_CONTAINER_WIDTH,
-                disabled=not st.session_state.yaml_is_valid
-            )
-            st.download_button(**download_kwargs)
+        # Validate YAML button
+        button_kwargs = _get_button_kwargs(
+            label=settings.VALIDATE_YAML_TEXT,
+            use_container_width=settings.USE_CONTAINER_WIDTH,
+            type="secondary"
+        )
+        if st.button(**button_kwargs):
+            is_valid, message = ExportUtils.validate_yaml(data)
+            st.session_state.yaml_is_valid = is_valid
+            st.session_state.yaml_validation_status = message
+            _rerun_app()
 
         # Show validation status message
         if st.session_state.yaml_validation_status:
@@ -375,7 +361,18 @@ class UIComponents:
             else:
                 st.error(st.session_state.yaml_validation_status)
 
-        # Second row: CSV download button
+        # Download YAML button
+        download_kwargs = _get_download_button_kwargs(
+            label=settings.DOWNLOAD_YAML_TEXT,
+            data=preview,
+            file_name=settings.YAML_EXPORT_FILENAME,
+            mime=settings.YAML_EXPORT_MIME,
+            use_container_width=settings.USE_CONTAINER_WIDTH,
+            disabled=not st.session_state.yaml_is_valid
+        )
+        st.download_button(**download_kwargs)
+
+        # Download CSV button
         download_kwargs = _get_download_button_kwargs(
             label=settings.DOWNLOAD_CSV_TEXT,
             data=ExportUtils.export_csv(data),
