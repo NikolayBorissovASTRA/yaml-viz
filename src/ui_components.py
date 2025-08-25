@@ -26,6 +26,11 @@ def _supports_rerun() -> bool:
     return version.parse(st.__version__) >= version.parse("1.18.0")
 
 
+def _supports_use_container_width() -> bool:
+    """Check if current Streamlit version supports use_container_width parameter."""
+    return version.parse(st.__version__) >= version.parse("1.2.0")
+
+
 def _get_selectbox_kwargs(label: str, options: list, key: str = None, label_visibility: str = None) -> dict:
     """Get selectbox kwargs compatible with current Streamlit version."""
     kwargs = {
@@ -68,9 +73,64 @@ def _get_code_kwargs(body: str, language: str = None, line_numbers: bool = None)
 def _rerun_app() -> None:
     """Rerun the Streamlit app using compatible method."""
     if _supports_rerun():
-        _rerun_app()
+        st.rerun()
     else:
         st.experimental_rerun()
+
+
+def _get_button_kwargs(label: str, key: str = None, help: str = None, 
+                      on_click=None, args=None, kwargs=None, type: str = "secondary", 
+                      disabled: bool = False, use_container_width: bool = None) -> dict:
+    """Get st.button kwargs compatible with current Streamlit version."""
+    button_kwargs = {
+        "label": label
+    }
+    if key:
+        button_kwargs["key"] = key
+    if help:
+        button_kwargs["help"] = help
+    if on_click:
+        button_kwargs["on_click"] = on_click
+    if args:
+        button_kwargs["args"] = args
+    if kwargs:
+        button_kwargs["kwargs"] = kwargs
+    if type != "secondary":
+        button_kwargs["type"] = type
+    if disabled:
+        button_kwargs["disabled"] = disabled
+    if use_container_width is not None and _supports_use_container_width():
+        button_kwargs["use_container_width"] = use_container_width
+    return button_kwargs
+
+
+def _get_download_button_kwargs(label: str, data, file_name: str = None, mime: str = None,
+                               key: str = None, help: str = None, on_click=None, args=None, 
+                               kwargs=None, disabled: bool = False, use_container_width: bool = None) -> dict:
+    """Get st.download_button kwargs compatible with current Streamlit version."""
+    download_kwargs = {
+        "label": label,
+        "data": data
+    }
+    if file_name:
+        download_kwargs["file_name"] = file_name
+    if mime:
+        download_kwargs["mime"] = mime
+    if key:
+        download_kwargs["key"] = key
+    if help:
+        download_kwargs["help"] = help
+    if on_click:
+        download_kwargs["on_click"] = on_click
+    if args:
+        download_kwargs["args"] = args
+    if kwargs:
+        download_kwargs["kwargs"] = kwargs
+    if disabled:
+        download_kwargs["disabled"] = disabled
+    if use_container_width is not None and _supports_use_container_width():
+        download_kwargs["use_container_width"] = use_container_width
+    return download_kwargs
 
 
 class UIComponents:
@@ -211,12 +271,13 @@ class UIComponents:
     @staticmethod
     def _render_clear_button() -> None:
         """Render clear form button."""
-        if st.button(
-            settings.CLEAR_BUTTON_TEXT,
+        button_kwargs = _get_button_kwargs(
+            label=settings.CLEAR_BUTTON_TEXT,
             use_container_width=settings.USE_CONTAINER_WIDTH,
             type="secondary",
-            key="clear_form_main",
-        ):
+            key="clear_form_main"
+        )
+        if st.button(**button_kwargs):
             UIComponents._clear_form()
 
     @staticmethod
@@ -285,25 +346,27 @@ class UIComponents:
         col_validate, col_yaml = st.columns(2)
 
         with col_validate:
-            if st.button(
-                settings.VALIDATE_YAML_TEXT,
+            button_kwargs = _get_button_kwargs(
+                label=settings.VALIDATE_YAML_TEXT,
                 use_container_width=settings.USE_CONTAINER_WIDTH,
-                type="secondary",
-            ):
+                type="secondary"
+            )
+            if st.button(**button_kwargs):
                 is_valid, message = ExportUtils.validate_yaml(data)
                 st.session_state.yaml_is_valid = is_valid
                 st.session_state.yaml_validation_status = message
                 _rerun_app()
 
         with col_yaml:
-            st.download_button(
-                settings.DOWNLOAD_YAML_TEXT,
-                preview,
-                settings.YAML_EXPORT_FILENAME,
-                settings.YAML_EXPORT_MIME,
+            download_kwargs = _get_download_button_kwargs(
+                label=settings.DOWNLOAD_YAML_TEXT,
+                data=preview,
+                file_name=settings.YAML_EXPORT_FILENAME,
+                mime=settings.YAML_EXPORT_MIME,
                 use_container_width=settings.USE_CONTAINER_WIDTH,
-                disabled=not st.session_state.yaml_is_valid,
+                disabled=not st.session_state.yaml_is_valid
             )
+            st.download_button(**download_kwargs)
 
         # Show validation status message
         if st.session_state.yaml_validation_status:
@@ -313,10 +376,11 @@ class UIComponents:
                 st.error(st.session_state.yaml_validation_status)
 
         # Second row: CSV download button
-        st.download_button(
-            settings.DOWNLOAD_CSV_TEXT,
-            ExportUtils.export_csv(data),
-            settings.CSV_EXPORT_FILENAME,
-            settings.CSV_EXPORT_MIME,
-            use_container_width=settings.USE_CONTAINER_WIDTH,
+        download_kwargs = _get_download_button_kwargs(
+            label=settings.DOWNLOAD_CSV_TEXT,
+            data=ExportUtils.export_csv(data),
+            file_name=settings.CSV_EXPORT_FILENAME,
+            mime=settings.CSV_EXPORT_MIME,
+            use_container_width=settings.USE_CONTAINER_WIDTH
         )
+        st.download_button(**download_kwargs)

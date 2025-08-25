@@ -28,6 +28,15 @@ The `st.rerun()` function was renamed from `st.experimental_rerun()` in Streamli
 AttributeError: module 'streamlit' has no attribute 'rerun'
 ```
 
+### use_container_width Parameter
+
+The `use_container_width` parameter for buttons and download buttons was introduced in Streamlit 1.2.0, causing issues on older versions:
+
+```
+TypeError: button() got an unexpected keyword argument 'use_container_width'
+TypeError: download_button() got an unexpected keyword argument 'use_container_width'
+```
+
 ## Solution
 
 The project implements automatic version detection and compatibility:
@@ -38,11 +47,14 @@ The project implements automatic version detection and compatibility:
 - `_supports_label_visibility()` - Checks if version >= 1.16.0
 - `_supports_line_numbers()` - Checks if version >= 1.28.0  
 - `_supports_rerun()` - Checks if version >= 1.18.0
+- `_supports_use_container_width()` - Checks if version >= 1.2.0
 
 **Parameter Building:**
 - `_get_selectbox_kwargs()` - Compatible selectbox parameters
 - `_get_file_uploader_kwargs()` - Compatible file uploader parameters  
 - `_get_code_kwargs()` - Compatible code display parameters
+- `_get_button_kwargs()` - Compatible button parameters
+- `_get_download_button_kwargs()` - Compatible download button parameters
 
 **Function Wrappers:**
 - `_rerun_app()` - Uses `st.rerun()` or `st.experimental_rerun()` based on version
@@ -88,19 +100,46 @@ st.rerun()
 _rerun_app()  # Uses st.rerun() or st.experimental_rerun()
 ```
 
+#### Button Compatibility
+```python
+# Before (incompatible with old versions)
+st.button("Click", use_container_width=True)
+
+# After (compatible with all versions)
+kwargs = _get_button_kwargs(
+    label="Click",
+    use_container_width=True
+)
+st.button(**kwargs)
+```
+
+#### Download Button Compatibility
+```python
+# Before (incompatible with old versions)
+st.download_button("Download", data=content, use_container_width=True)
+
+# After (compatible with all versions)
+kwargs = _get_download_button_kwargs(
+    label="Download",
+    data=content,
+    use_container_width=True
+)
+st.download_button(**kwargs)
+```
+
 ## Version Support
 
-| Streamlit Version | Status | label_visibility | line_numbers | st.rerun | Behavior |
-|------------------|--------|------------------|--------------|----------|----------|
-| 1.12.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | Basic functionality |
-| 1.16.0 - 1.17.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses experimental | Collapsed labels |
-| 1.18.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses st.rerun | Modern rerun |
-| 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Uses st.rerun | Full features |
+| Streamlit Version | Status | label_visibility | line_numbers | st.rerun | use_container_width | Behavior |
+|------------------|--------|------------------|--------------|----------|--------------------|---------| 
+| 1.2.0 - 1.15.x | ✅ Supported | ❌ Ignored | ❌ Ignored | Uses experimental | ✅ Applied | Basic with buttons |
+| 1.16.0 - 1.17.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses experimental | ✅ Applied | Collapsed labels |
+| 1.18.0 - 1.27.x | ✅ Supported | ✅ Applied | ❌ Ignored | Uses st.rerun | ✅ Applied | Modern rerun |
+| 1.28.0+ | ✅ Supported | ✅ Applied | ✅ Applied | Uses st.rerun | ✅ Applied | Full features |
 
 ## Dependencies
 
 - **packaging>=21.0** - Required for version comparison
-- **streamlit>=1.12.0** - Minimum supported version
+- **streamlit>=1.2.0** - Minimum supported version (for use_container_width support)
 
 ## Testing
 
@@ -122,7 +161,7 @@ The application will automatically adapt to your Streamlit version without any m
 | Platform | Streamlit Version | Impact | Solution |
 |----------|------------------|--------|----------|
 | **macOS** | Latest (1.48+) | None | Full functionality |
-| **Windows** | Often older (1.12+) | `label_visibility` ignored | UI still works, labels visible |
+| **Windows** | Often older (1.12+) | Some parameters ignored | UI remains fully functional |
 | **Linux** | Varies | Auto-detected | Adapts to installed version |
 
 ## Benefits
