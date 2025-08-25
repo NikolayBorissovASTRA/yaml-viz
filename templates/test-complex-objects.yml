@@ -1,0 +1,34 @@
+Projekt: "Test Complex Objects"
+
+Inventargruppe:
+  Orientierung (ORT):
+    - name: "Referenzpunkte"
+      code: REF
+    - name: "Kilometrierung (RBBS-Punkte) und RBBS-Achse"
+      code: RBBS
+    - name: "Bezugspunkte und Achse: Rampe und Anschluss"
+    - name: "Baulinien"
+      code: BLI
+  Umgebung (UMG):
+    - name: "Geländemodell"
+      code: GLM
+    - name: "Gebäude"
+      code: GEB
+    - name: "Kantons-/Gemeindegrenze"
+      code: GRE
+    - name: "Amtliche Vermessung"
+      code: AMV
+    - name: "Bauzonen"
+      code: BZO
+    - name: "Flächennutzung"
+      code: FLN
+    - name: "Bepflanzung"
+      code: BEP
+    - name: "Freileitung"
+      code: FRL
+    - name: "Geologie"
+      code: GEO
+    - name: "Grundwasser"
+      code: GRW
+    - name: "Landerwerb/Enteignung"
+      code: LEW

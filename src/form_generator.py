@@ -101,7 +101,9 @@ class FormGenerator:
                     key=f"{settings.CAT_PREFIX}{key}_{cat_key}",
                 )
                 if selected:
-                    category_data[cat_key] = selected
+                    # Map selected display strings back to original objects
+                    selected_objects = self._map_display_to_objects(selected, items)
+                    category_data[cat_key] = selected_objects
 
         if category_data:
             self.form_data[key] = category_data
@@ -136,6 +138,26 @@ class FormGenerator:
             code_suffix = f" ({item['code']})" if "code" in item else ""
             return f"{item['name']}{code_suffix}"
         return str(item)
+
+    def _map_display_to_objects(self, selected_displays: List[str], original_items: List) -> List:
+        """Map selected display strings back to original objects."""
+        if not selected_displays:
+            return []
+        
+        result = []
+        for display_str in selected_displays:
+            # Find matching original item
+            for item in original_items:
+                if self._format_item_display(item) == display_str:
+                    # For objects with name/code, preserve original structure
+                    if isinstance(item, dict):
+                        result.append(item)
+                    else:
+                        # For simple strings, just add the string
+                        result.append(item)
+                    break
+        
+        return result
 
     def get_structured_data(self) -> Dict:
         """Get form data with preserved key order and original structure."""
