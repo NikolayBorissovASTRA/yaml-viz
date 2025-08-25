@@ -1,0 +1,5 @@
+Führe folgende Befehle sequentiell in der CMD aus:
+1. cd C:\Users\%USER%\yaml-viz-main (falls unter C:\Users\%USER%\yaml-viz-main entpackt wurde)
+2. python -m pip install --upgrade pip
+2. pip install -r requirements.txt
+3. streamlit run src/app.py
