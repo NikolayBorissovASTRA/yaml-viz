@@ -13,6 +13,7 @@ A clean, modular Streamlit application that generates dynamic forms from YAML te
 
 - Python 3.10+
 - Either [uv](https://docs.astral.sh/uv/) (recommended) or pip package manager
+- Streamlit 1.12.0+ (automatically handles version compatibility)
 
 ### Installation
 
@@ -165,7 +166,13 @@ The demo script automatically detects whether you're using uv or pip and adapts 
 - **Linux/macOS**: Full functionality with automatic dependency detection
 - **Windows**: Basic support via .bat files, full features available via WSL/Git Bash
 - **Dependencies**: Automatically installs Playwright and Python packages, ffmpeg installation varies by platform
+- **Compatibility**: Supports Streamlit 1.12.0+ with automatic version detection
 
 See `./gif-demo/demo.sh help` or `gif-demo\demo.bat help` for configuration options.
+
+## 📚 Documentation
+
+- **[Architecture](docs/architecture.md)** - System design and module structure
+- **[Compatibility](docs/compatibility.md)** - Cross-platform Streamlit version support and Windows testing
 
 

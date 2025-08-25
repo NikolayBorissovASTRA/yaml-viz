@@ -3,11 +3,44 @@
 import streamlit as st
 from pathlib import Path
 from typing import Dict
+from packaging import version
 
 import settings
 from form_generator import FormGenerator
 from export_utils import ExportUtils
 from template_manager import TemplateManager
+
+
+def _supports_label_visibility() -> bool:
+    """Check if current Streamlit version supports label_visibility parameter."""
+    return version.parse(st.__version__) >= version.parse("1.16.0")
+
+
+def _get_selectbox_kwargs(label: str, options: list, key: str = None, label_visibility: str = None) -> dict:
+    """Get selectbox kwargs compatible with current Streamlit version."""
+    kwargs = {
+        "label": label,
+        "options": options
+    }
+    if key:
+        kwargs["key"] = key
+    if label_visibility and _supports_label_visibility():
+        kwargs["label_visibility"] = label_visibility
+    return kwargs
+
+
+def _get_file_uploader_kwargs(label: str, type: list = None, key: str = None, label_visibility: str = None) -> dict:
+    """Get file_uploader kwargs compatible with current Streamlit version."""
+    kwargs = {
+        "label": label
+    }
+    if type:
+        kwargs["type"] = type
+    if key:
+        kwargs["key"] = key
+    if label_visibility and _supports_label_visibility():
+        kwargs["label_visibility"] = label_visibility
+    return kwargs
 
 
 class UIComponents:
@@ -74,27 +107,30 @@ class UIComponents:
 
             if template_files:
                 st.write("**Select Template:**")
-                selected_template = st.selectbox(
-                    "Choose a template",
-                    [""] + template_files,
+                selectbox_kwargs = _get_selectbox_kwargs(
+                    label="Choose a template",
+                    options=[""] + template_files,
                     key=f"template_selector_{st.session_state.file_uploader_key}",
-                    label_visibility="collapsed",
+                    label_visibility="collapsed"
                 )
+                selected_template = st.selectbox(**selectbox_kwargs)
 
                 st.write("**OR Upload File:**")
-                uploaded = st.file_uploader(
-                    settings.UPLOAD_LABEL,
+                uploader_kwargs = _get_file_uploader_kwargs(
+                    label=settings.UPLOAD_LABEL,
                     type=settings.ALLOWED_FILE_TYPES,
-                    label_visibility="collapsed",
                     key=f"file_uploader_{st.session_state.file_uploader_key}",
+                    label_visibility="collapsed"
                 )
+                uploaded = st.file_uploader(**uploader_kwargs)
             else:
-                uploaded = st.file_uploader(
-                    settings.UPLOAD_LABEL,
+                uploader_kwargs = _get_file_uploader_kwargs(
+                    label=settings.UPLOAD_LABEL,
                     type=settings.ALLOWED_FILE_TYPES,
-                    label_visibility=settings.FILE_UPLOAD_LABEL_VISIBILITY,
                     key=f"file_uploader_{st.session_state.file_uploader_key}",
+                    label_visibility=settings.FILE_UPLOAD_LABEL_VISIBILITY
                 )
+                uploaded = st.file_uploader(**uploader_kwargs)
                 selected_template = None
 
         UIComponents._handle_template_selection(selected_template, uploaded)
